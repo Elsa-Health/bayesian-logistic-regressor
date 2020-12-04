@@ -23,7 +23,7 @@ export const logitRegressor = (
     console.log('boop');
   }
 
-  const terms: NormalRVS[] = expr.map(exp => {
+  const terms: NormalRVS[] = expr?.map(exp => {
     if (Array.isArray(exp)) {
       // Element contains a number and a random variable
       return normal(exp[0] * exp[1].mean, exp[0] * exp[1].variance);
@@ -41,7 +41,7 @@ export const logitRegressor = (
   });
 
 
-  return times(samples, () => generateGaussian(mean, variance)).map(
+  return times(samples, () => generateGaussian(mean, variance))?.map(
     s => 1 / (1 + Math.exp(-s))
   );
 };
