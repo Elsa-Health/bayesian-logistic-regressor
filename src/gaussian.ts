@@ -7,6 +7,7 @@ export const generateGaussian = (mean: number, variance: number): number => {
   const u2 = Math.random();
 
   const z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(_2PI * u2);
+  //   const z1 = Math.sqrt(-2.0 * Math.log(u1)) * Math.sin(_2PI * u2);
 
   return z0 * std + mean;
 };
