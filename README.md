@@ -1,3 +1,5 @@
+![CI](https://github.com/Elsa-Health/bayesian-logistic-regressor/workflows/CI/badge.svg?branch=main)
+
 # Bayesian Logistic Regression
 
 Logistic regressor using Normally distributed variables
