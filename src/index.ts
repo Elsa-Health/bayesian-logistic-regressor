@@ -40,7 +40,6 @@ export const logitRegressor = (
     variance += term.variance;
   });
 
-
   return times(samples, () => generateGaussian(mean, variance))?.map(
     s => 1 / (1 + Math.exp(-s))
   );
