@@ -33,7 +33,7 @@ jobs:
         #   NODE_ENV: production
 
       - name: Test
-        run: yarn test  --maxWorkers=2
+        run: yarn test --ci --coverage --maxWorkers=2
 
       - name: Build
         run: yarn build
