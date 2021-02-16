@@ -11,7 +11,7 @@ on:
   
 jobs:
   test:
-    name: Lint, and test on Node ${{ matrix.node }} and ${{ matrix.os }}
+    name: Test + Code Coverage on Node ${{ matrix.node }} and ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -24,6 +24,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
+
       - name: Install Dependencies (with cache)
         uses: bahmutov/npm-install@v1
         with:
@@ -33,18 +34,7 @@ jobs:
 
       - name: Test
         run: yarn test  --maxWorkers=2
-  
-  coverage:
-    needs: test
-    name: Build and Code Coverage on Node ${{ matrix.node }} and ${{ matrix.os }}
 
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        node: ['10.x', '12.x', '14.x']
-        os: [ubuntu-latest, windows-latest]
-
-    steps:
       - name: Build
         run: yarn build
         
@@ -52,10 +42,16 @@ jobs:
         uses: coverallsapp/github-action@v1.1.2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          flag-name: run-${{ matrix.os }}-${{ matrix.node }}
+          parallel: true
           
   finish:
-    needs: coverage
-    runs-on: ubuntu-latest
+    needs: test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node: ['10.x', '12.x', '14.x']
+        os: [ubuntu-latest, windows-latest]
     steps:
     - name: Coveralls Finished
       uses: coverallsapp/github-action@master
