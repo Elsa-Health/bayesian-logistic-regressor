@@ -1,4 +1,4 @@
-name: Test + Coveralls
+name: ci-test-coverage
 on:
   push:
     branches:
