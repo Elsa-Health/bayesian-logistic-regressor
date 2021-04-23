@@ -1,6 +1,7 @@
-![CI](https://github.com/Elsa-Health/bayesian-logistic-regressor/workflows/CI/badge.svg?branch=main)
-
 # Bayesian Logistic Regression
+
+![CI](https://github.com/Elsa-Health/bayesian-logistic-regressor/workflows/ci-test-coverage/badge.svg?branch=dev)
+[![Coverage Status](https://coveralls.io/repos/github/Elsa-Health/bayesian-logistic-regressor/badge.svg?branch=test/init-workflow)](https://coveralls.io/github/Elsa-Health/bayesian-logistic-regressor?branch=test/init-workflow)
 
 According to Wikipedia:
 
