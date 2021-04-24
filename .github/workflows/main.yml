@@ -1,14 +1,18 @@
-name: CI
+name: ci-test-coverage
 on:
   push:
     branches:
+      - main
       - dev
-
-  
+      - test/**
+  pull_request:
+    branches:
+      - main
+      - dev
+      - test/**
 jobs:
-  build:
-    name: Build, lint, and test on Node ${{ matrix.node }} and ${{ matrix.os }}
-
+  test:
+    name: Test + Code Coverage on Node ${{ matrix.node }} and ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -16,22 +20,42 @@ jobs:
         os: [ubuntu-latest, windows-latest]
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-
+      - uses: actions/checkout@v2
       - name: Use Node ${{ matrix.node }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
 
-      - name: Install deps and build (with cache)
+      - name: Install Dependencies (with cache)
         uses: bahmutov/npm-install@v1
-
-      - name: Lint
-        run: yarn lint
+        with:
+          useRollingCache: true
+        # env:
+        #   NODE_ENV: production
 
       - name: Test
         run: yarn test --ci --coverage --maxWorkers=2
 
       - name: Build
         run: yarn build
+        
+      - name: Coveralls GitHub Action
+        uses: coverallsapp/github-action@v1.1.2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          flag-name: run-${{ matrix.os }}-${{ matrix.node }}
+          parallel: true
+          
+  finish:
+    needs: test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node: ['10.x', '12.x', '14.x']
+        os: [ubuntu-latest, windows-latest]
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+        parallel-finished: true
