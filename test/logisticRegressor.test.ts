@@ -21,18 +21,29 @@ describe('Logit Regressor', () => {
     const answerMean = answer.reduce((a, b) => a + b, 0) / answer.length;
 
     const aSD = Math.sqrt(a.variance);
+    const bSD = Math.sqrt(b.variance);
     const aMean = a.mean;
+    const bMean = b.mean;
 
-    const zScore = (intercept.mean-aMean)/aSD;
+    const a_zScore = (intercept.mean-aMean)/aSD;
+    const b_zScore = (intercept.mean-bMean)/bSD;
   
-    const lowerBound = answerMean - (zScore*(aSD/500)); 
+    const a_lowerBound = answerMean - (a_zScore*(aSD/500)); 
+    const b_lowerBound = answerMean - (b_zScore*(bSD/500)); 
 
-    const upperBound = answerMean + (zScore*(aSD/500)); 
+    //final lower bound
+    const finalLower = (a_lowerBound+b_lowerBound)/2;
+
+    const a_upperBound = answerMean + (a_zScore*(aSD/500)); 
+    const b_upperBound = answerMean + (a_zScore*(aSD/500)); 
+
+    //final uppper bound
+    const finalUpper = (a_upperBound+b_upperBound)/2;
 
 
     // READ: https://towardsdatascience.com/introduction-to-bayesian-logistic-regression-7e39a0bae691
-    expect(+answerMean.toFixed(2)).toBeGreaterThanOrEqual(lowerBound)
-    expect(+answerMean.toFixed(2)).toBeLessThanOrEqual(upperBound)
+    expect(+answerMean.toFixed(2)).toBeGreaterThanOrEqual(finalLower)
+    expect(+answerMean.toFixed(2)).toBeLessThanOrEqual(finalUpper)
     // expect(true).toBe(true)
 
     // expect(answer.mean).toBe(17);
